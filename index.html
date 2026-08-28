@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARGOS — Marketing Industrial B2B | Método VQC</title>
+<meta name="description" content="A ARGOS transforma o digital em canal de geração de demanda, oportunidades comerciais e novas cotações para indústrias. Método VQC: Volume, Qualificação, Cotação.">
+<meta property="og:title" content="ARGOS — Marketing Industrial B2B | Método VQC">
+<meta property="og:description" content="Geramos volume, identificamos o que qualifica e escalamos o que gera cotação.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" as="image" href="assets/especialista.webp" type="image/webp" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script>
+/* Progressive enhancement: o reveal so e armado quando ha suporte a
+   IntersectionObserver. Sem JS ou sem suporte, o conteudo nasce visivel. */
+if ('IntersectionObserver' in window) document.documentElement.className += ' reveal';
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ARGOS · Marketing Industrial B2B
+   Direção: sala de controle industrial. Preto técnico, malha de
+   blueprint, dados em monoespaçada. O gradiente azul→verde É o
+   método: azul = Volume, verde = Cotação.
+   ============================================================ */
+
+:root{
+  /* Paleta herdada da identidade Argos */
+  --ink:        #0A0A0A;
+  --ink-2:      #0F0F11;
+  --card:       #121212;
+  --card-2:     #161618;
+  --line:       #292929;
+  --line-soft:  rgba(255,255,255,.08);
+  --fg:         #FAFAFA;
+  --muted:      #A6A6A6;
+  --muted-2:    #8A8A8A;
+
+  --blue:       #1A05FF;
+  --blue-lt:    #6A57FF;
+  --green:      #1FEF49;
+  --green-dk:   #12B336;
+
+  --grad:       linear-gradient(135deg, #1A05FF 0%, #1FEF49 100%);
+  /* Para TEXTO em gradiente usamos o azul claro: #1A05FF sobre preto
+     rende ~1.8:1 de contraste e some no fundo. #7C6BFF passa em AA large. */
+  --grad-txt:   linear-gradient(120deg, #7C6BFF 0%, #1FEF49 100%);
+  --grad-soft:  linear-gradient(135deg, rgba(26,5,255,.16) 0%, rgba(31,239,73,.16) 100%);
+  --glow-blue:  0 0 60px rgba(26,5,255,.35);
+  --glow-green: 0 0 70px rgba(31,239,73,.22);
+  --shadow:     0 8px 32px -8px rgba(0,0,0,.6);
+
+  --r:          14px;
+  --r-sm:       10px;
+  --max:        1280px;
+
+  --display: 'Archivo', 'Helvetica Neue', sans-serif;
+  --body:    'IBM Plex Sans', system-ui, sans-serif;
+  --mono:    'IBM Plex Mono', ui-monospace, monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--ink);-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--body);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.65;
+  color:var(--fg);
+  background:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+
+h1,h2,h3,h4,.display{
+  font-family:var(--display);
+  font-weight:800;
+  line-height:1.02;
+  letter-spacing:-.025em;
+  font-stretch:105%;
+}
+
+/* ---------- utilitários ---------- */
+.container{max-width:var(--max);margin:0 auto;padding:0 32px;position:relative;z-index:2}
+section{padding:120px 0;position:relative}
+.grad-text{
+  background:var(--grad-txt);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.green{color:var(--green)}
+.rule{height:1px;background:var(--line);border:0}
+
+/* malha de blueprint global */
+.mesh{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 30%, #000 30%, transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 30%, #000 30%, transparent 78%);
+}
+.grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+
+/* ---------- kicker de seção ---------- */
+.kick{
+  font-family:var(--mono);
+  font-size:12px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted-2);
+  display:inline-flex;align-items:center;gap:14px;
+  margin-bottom:22px;
+}
+.kick::before{
+  content:'';width:34px;height:1px;background:var(--grad);flex-shrink:0;
+}
+.kick b{color:var(--green);font-weight:500}
+
+h2.sec{font-size:clamp(30px,4.4vw,54px);max-width:19ch;margin-bottom:20px}
+h2.sec.wide{max-width:24ch}
+.lead{
+  font-size:19px;font-weight:300;color:var(--muted);
+  max-width:62ch;line-height:1.6;margin-bottom:56px;
+}
+.lead b{color:var(--fg);font-weight:500}
+
+/* ---------- botões ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  font-family:var(--display);font-weight:700;font-size:15px;
+  letter-spacing:.04em;text-transform:uppercase;
+  padding:20px 30px;border-radius:12px;border:0;cursor:pointer;
+  position:relative;isolation:isolate;
+  transition:transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease;
+}
+.btn .arw{transition:transform .25s cubic-bezier(.2,.7,.3,1);display:inline-block}
+.btn:hover{transform:translateY(-3px)}
+.btn:hover .arw{transform:translateX(6px)}
+.btn:active{transform:translateY(-1px)}
+.btn-grad{background:var(--grad);color:#fff;box-shadow:0 14px 40px -12px rgba(26,5,255,.7)}
+.btn-grad:hover{box-shadow:0 22px 56px -12px rgba(26,5,255,.85), var(--glow-green)}
+.btn-green{background:var(--green);color:#06170B;box-shadow:0 14px 40px -14px rgba(31,239,73,.7)}
+.btn-green:hover{box-shadow:0 22px 54px -14px rgba(31,239,73,.85)}
+.btn-ghost{
+  background:rgba(255,255,255,.03);color:var(--fg);
+  border:1px solid var(--line);
+}
+.btn-ghost:hover{border-color:var(--green);background:rgba(31,239,73,.06)}
+.btn-full{width:100%}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+/* barra de progresso: o gradiente VQC preenchendo conforme a leitura avanca */
+.progress{
+  position:fixed;top:0;left:0;right:0;height:2px;z-index:80;
+  background:rgba(255,255,255,.06);pointer-events:none;
+}
+.progress i{
+  display:block;height:100%;background:var(--grad);
+  transform:scaleX(0);transform-origin:0 50%;
+}
+header{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:20px;padding:14px 32px;
+  background:rgba(10,10,10,.82);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  border-bottom:1px solid var(--line-soft);
+  transition:padding .3s ease, background .3s ease, border-color .3s ease;
+}
+html.scrolled header{
+  padding:9px 32px;background:rgba(10,10,10,.95);border-bottom-color:var(--line);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-lk{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  height:28px;width:auto;flex-shrink:0;display:block;
+  filter:drop-shadow(0 0 14px rgba(26,5,255,.45));
+}
+.brand-name{
+  font-family:var(--display);font-weight:800;font-size:19px;
+  letter-spacing:.14em;text-transform:uppercase;
+}
+.brand-tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted-2);
+  padding-left:14px;margin-left:2px;border-left:1px solid var(--line);
+}
+header .h-cta{
+  font-family:var(--display);font-weight:700;font-size:12.5px;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:11px 20px;border-radius:9px;
+  border:1px solid rgba(31,239,73,.35);color:var(--green);
+  transition:background .2s ease,border-color .2s ease;
+}
+header .h-cta:hover{background:rgba(31,239,73,.1);border-color:var(--green)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  padding:190px 0 110px;
+  overflow:hidden;
+  background-color:var(--ink);
+  /* 1a declaracao = reserva para quem nao entende image-set */
+  background-image:
+    radial-gradient(ellipse 70% 55% at 12% 8%, rgba(26,5,255,.16), transparent 62%),
+    radial-gradient(ellipse 55% 50% at 92% 78%, rgba(31,239,73,.08), transparent 60%),
+    url("assets/fabrica.jpg");
+  background-image:
+    radial-gradient(ellipse 70% 55% at 12% 8%, rgba(26,5,255,.16), transparent 62%),
+    radial-gradient(ellipse 55% 50% at 92% 78%, rgba(31,239,73,.08), transparent 60%),
+    image-set(url("assets/fabrica.webp") type("image/webp"),
+              url("assets/fabrica.jpg")  type("image/jpeg"));
+  /* Largura cheia ancorada no topo, nunca 'cover': a foto e 2.37:1 e o hero
+     quase quadrado, entao 'cover' ampliaria 2x e cortaria metade da cena.
+     A dissolucao para o preto ja vem embutida no arquivo. */
+  background-position:center, center, top center;
+  background-size:auto, auto, 100% auto;
+  background-repeat:no-repeat, no-repeat, no-repeat;
+}
+/* a malha de blueprint recua sobre a foto, para nao virar ruido */
+.hero .mesh{opacity:.4}
+.hero::after{
+  content:'';position:absolute;left:-10%;right:-10%;bottom:-1px;height:180px;
+  background:linear-gradient(to top, var(--ink), transparent);
+  z-index:1;pointer-events:none;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:center;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(31,239,73,.07);
+  border:1px solid rgba(31,239,73,.3);
+  border-radius:999px;padding:9px 18px 9px 13px;
+  font-family:var(--mono);font-size:11.5px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--green);
+  margin-bottom:30px;
+}
+.eyebrow .dot{
+  width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(31,239,73,.2);
+  animation:pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 3px rgba(31,239,73,.2)}
+  50%    {box-shadow:0 0 0 7px rgba(31,239,73,.05)}
+}
+.hero h1{
+  font-size:clamp(34px,4.5vw,60px);
+  line-height:1.03;
+  margin-bottom:26px;
+  max-width:15ch;
+  /* seguro contra os pontos de luz da foto de fabrica atras */
+  text-shadow:0 4px 26px rgba(0,0,0,.6), 0 1px 3px rgba(0,0,0,.4);
+}
+.hero h1 .l2{display:block}
+.hero h1 .l1{
+  display:block;font-size:.52em;font-weight:600;color:var(--muted);
+  letter-spacing:-.01em;margin-bottom:14px;
+  font-stretch:100%;
+}
+.hero-sub{
+  font-size:18px;font-weight:300;color:var(--muted);
+  max-width:56ch;line-height:1.62;margin-bottom:18px;
+  text-shadow:0 2px 14px rgba(0,0,0,.55);
+}
+.hero-sub b{color:var(--fg);font-weight:500}
+.hero-sub + .hero-sub{margin-bottom:38px}
+
+/* trilho VQC do hero */
+.vqc-rail{
+  display:flex;align-items:stretch;gap:0;
+  border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;max-width:600px;
+  background:rgba(255,255,255,.02);
+}
+.vqc-rail .step{
+  flex:1;padding:16px 18px;position:relative;
+  border-right:1px solid var(--line);
+}
+.vqc-rail .step:last-child{border-right:0}
+.vqc-rail .step .ltr{
+  font-family:var(--display);font-weight:900;font-size:13px;
+  letter-spacing:.05em;line-height:1;margin-bottom:6px;
+}
+.vqc-rail .step .nm{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);
+}
+.vqc-rail .s1 .ltr{color:var(--blue-lt)}
+.vqc-rail .s2 .ltr{color:#5CB878}
+.vqc-rail .s3 .ltr{color:var(--green)}
+.vqc-rail .step .bar{
+  position:absolute;left:0;right:0;bottom:0;height:2px;
+  transform-origin:0 50%;
+}
+.vqc-rail .s1 .bar{background:linear-gradient(90deg,#1A05FF,#3D4CD1)}
+.vqc-rail .s2 .bar{background:linear-gradient(90deg,#3D4CD1,#2FA55E)}
+.vqc-rail .s3 .bar{background:linear-gradient(90deg,#2FA55E,#1FEF49)}
+
+/* fundador recortado: sem moldura, pertencendo ao proprio fundo da pagina */
+.hero-figura{
+  position:relative;justify-self:end;width:100%;max-width:470px;margin:0;
+}
+.hf-glow{
+  position:absolute;z-index:0;left:50%;top:4%;transform:translateX(-50%);
+  width:116%;aspect-ratio:1/1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 50% 44%,
+    rgba(26,5,255,.52) 0%, rgba(26,5,255,.24) 32%,
+    rgba(31,239,73,.13) 55%, transparent 72%);
+  filter:blur(8px);
+}
+.hf-foto{
+  position:relative;z-index:1;width:100%;height:auto;display:block;
+  /* luz de contorno: azul de um lado, verde do outro — o VQC contornando ele.
+     Sem isso o terno marinho desapareceria no fundo preto. */
+  filter:
+    drop-shadow(-15px 4px 22px rgba(26,5,255,.55))
+    drop-shadow(16px 10px 26px rgba(31,239,73,.26))
+    drop-shadow(0 22px 38px rgba(0,0,0,.7));
+  /* a base dissolve no fundo, em vez de terminar num corte reto */
+  -webkit-mask-image:linear-gradient(to bottom,#000 83%,rgba(0,0,0,.5) 93%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 83%,rgba(0,0,0,.5) 93%,transparent 100%);
+}
+/* etiqueta flutuante */
+.hf-chip{
+  position:absolute;z-index:3;left:-5%;top:47%;
+  display:flex;align-items:center;gap:12px;
+  background:rgba(13,13,15,.62);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  border:1px solid rgba(31,239,73,.3);border-radius:14px;
+  padding:14px 20px;
+  box-shadow:0 24px 52px -16px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.1);
+}
+.hc-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(31,239,73,.2);
+  animation:pulse 2.6s ease-in-out infinite;
+}
+.hf-nome{
+  font-family:var(--display);font-weight:800;
+  font-size:21px;line-height:1.12;letter-spacing:-.015em;color:var(--fg);
+  max-width:13ch;
+}
+/* CTA flutuando no meio do retrato.
+   Centralizado por flex, nao por transform: assim o :hover do botao
+   (translateY) e o flutuar do GSAP nao brigam pelo mesmo transform. */
+.hf-cta-wrap{
+  position:absolute;z-index:4;left:0;right:0;top:66%;
+  display:flex;justify-content:center;pointer-events:none;
+}
+.hf-cta-wrap .btn{
+  pointer-events:auto;white-space:nowrap;
+  box-shadow:0 26px 58px -14px rgba(0,0,0,.92), 0 16px 44px -14px rgba(26,5,255,.85);
+}
+.hf-cta-wrap .btn:hover{
+  box-shadow:0 32px 70px -14px rgba(0,0,0,.95), 0 20px 54px -12px rgba(26,5,255,.95), var(--glow-green);
+}
+.hc-note{
+  position:relative;z-index:2;margin-top:8px;
+  font-size:11.5px;color:var(--muted-2);text-align:center;line-height:1.55;
+}
+
+/* selos do hero */
+.hero-selos{
+  margin-top:64px;padding-top:38px;
+  border-top:1px solid var(--line);
+  display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start;
+}
+.selo .num{
+  font-family:var(--display);font-weight:900;font-size:38px;line-height:1;
+  margin-bottom:8px;letter-spacing:-.03em;
+}
+.selo .lab{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted-2);line-height:1.5;max-width:22ch;
+}
+
+/* ============================================================
+   02 · PROBLEMA
+   ============================================================ */
+.sec-problema{background:var(--ink-2);border-top:1px solid var(--line-soft)}
+.prob-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;
+}
+.prob-card{
+  background:var(--card);padding:40px 36px;
+  transition:background .3s ease;position:relative;
+}
+.prob-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--grad);transform:scaleY(0);transform-origin:top;
+  transition:transform .35s cubic-bezier(.2,.7,.3,1);
+}
+.prob-card:hover{background:var(--card-2)}
+.prob-card:hover::before{transform:scaleY(1)}
+.prob-num{
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  letter-spacing:.14em;color:var(--muted-2);margin-bottom:18px;
+}
+.prob-card h3{
+  font-size:22px;font-weight:700;line-height:1.18;margin-bottom:12px;
+  letter-spacing:-.015em;
+}
+.prob-card p{font-size:15.5px;font-weight:300;color:var(--muted);line-height:1.62}
+.prob-fecho{
+  margin-top:34px;padding:30px 36px;
+  background:var(--grad-soft);
+  border:1px solid rgba(31,239,73,.24);border-radius:var(--r);
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(19px,2.3vw,26px);line-height:1.3;text-align:center;
+  letter-spacing:-.02em;
+}
+
+/* ============================================================
+   03 · MÉTODO VQC
+   ============================================================ */
+.sec-metodo{
+  background:
+    radial-gradient(ellipse 60% 50% at 85% 12%, rgba(26,5,255,.16), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 8% 88%, rgba(31,239,73,.10), transparent 60%),
+    var(--ink);
+  border-top:1px solid var(--line-soft);
+}
+.vqc-stack{display:flex;flex-direction:column;gap:20px}
+.vqc-block{
+  display:grid;grid-template-columns:150px 1fr;gap:44px;
+  background:rgba(255,255,255,.028);
+  border:1px solid var(--line);border-radius:var(--r);
+  padding:44px;position:relative;overflow:hidden;
+  transition:border-color .3s ease, background .3s ease;
+}
+.vqc-block:hover{background:rgba(255,255,255,.045)}
+.vqc-block .edge{
+  position:absolute;left:0;top:0;bottom:0;width:3px;
+  transform-origin:50% 0;
+}
+.vqc-block.v .edge{background:linear-gradient(180deg,#1A05FF,#3B36E8)}
+.vqc-block.q .edge{background:linear-gradient(180deg,#3B36E8,#2CA95F)}
+.vqc-block.c .edge{background:linear-gradient(180deg,#2CA95F,#1FEF49)}
+.vqc-block.v:hover{border-color:rgba(106,87,255,.45)}
+.vqc-block.q:hover{border-color:rgba(76,160,120,.45)}
+.vqc-block.c:hover{border-color:rgba(31,239,73,.45)}
+
+.vqc-letra{
+  font-family:var(--display);font-weight:900;
+  font-size:118px;line-height:.8;letter-spacing:-.06em;
+}
+.vqc-block.v .vqc-letra{color:var(--blue-lt);text-shadow:0 0 60px rgba(26,5,255,.5)}
+.vqc-block.q .vqc-letra{color:#4CA078;text-shadow:0 0 60px rgba(60,140,110,.4)}
+.vqc-block.c .vqc-letra{color:var(--green);text-shadow:0 0 60px rgba(31,239,73,.35)}
+.vqc-etapa{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted-2);margin-top:14px;
+}
+.vqc-block h3{
+  font-size:clamp(22px,2.6vw,30px);font-weight:800;
+  margin-bottom:8px;letter-spacing:-.02em;line-height:1.12;
+}
+.vqc-tit{
+  font-family:var(--mono);font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:14px;
+}
+.vqc-block.v .vqc-tit{color:var(--blue-lt)}
+.vqc-block.q .vqc-tit{color:#5CB878}
+.vqc-block.c .vqc-tit{color:var(--green)}
+.vqc-block p{font-size:16.5px;font-weight:300;color:var(--muted);line-height:1.66;max-width:66ch}
+.vqc-block p + p{margin-top:12px}
+.vqc-lista{list-style:none;margin:20px 0 0;display:grid;gap:10px}
+.vqc-lista li{
+  font-size:15.5px;font-weight:300;color:var(--muted);
+  padding-left:26px;position:relative;line-height:1.55;
+}
+.vqc-lista li::before{
+  content:'';position:absolute;left:0;top:9px;
+  width:11px;height:1px;background:var(--green);
+}
+.vqc-saida{
+  margin-top:26px;padding-top:22px;border-top:1px dashed var(--line);
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+.vqc-saida span{
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;
+  padding:8px 14px;border-radius:8px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);
+  color:var(--fg);
+}
+.vqc-block.c .vqc-saida span{
+  background:rgba(31,239,73,.09);border-color:rgba(31,239,73,.3);color:var(--green);
+}
+
+.metodo-fecho{
+  margin-top:36px;display:grid;grid-template-columns:1fr auto;
+  gap:32px;align-items:center;
+  padding:38px 44px;border-radius:var(--r);
+  background:var(--card);border:1px solid var(--line);
+}
+.metodo-fecho p{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(19px,2.2vw,25px);line-height:1.35;letter-spacing:-.02em;
+}
+.metodo-fecho p span{display:block}
+.metodo-fecho p .hl{color:var(--green)}
+
+/* ============================================================
+   04 · CASES
+   ============================================================ */
+.sec-cases{background:var(--ink-2);border-top:1px solid var(--line-soft)}
+.cases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.case{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;transition:border-color .3s ease,transform .3s ease;
+}
+.case:hover{border-color:rgba(31,239,73,.35);transform:translateY(-4px)}
+.case-top{
+  padding:32px 36px;border-bottom:1px solid var(--line);
+  background:var(--grad-soft);
+}
+.case-logo{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;border-radius:10px;padding:14px 20px;
+  margin-bottom:14px;line-height:0;
+  box-shadow:0 10px 26px -12px rgba(0,0,0,.8);
+}
+.case-logo img{height:38px;width:auto;display:block}
+.case-seg{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--green);
+}
+.case-body{padding:32px 36px}
+.case-item + .case-item{margin-top:24px;padding-top:24px;border-top:1px dashed var(--line)}
+.case-lab{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted-2);margin-bottom:10px;
+}
+.case-item p{font-size:16px;font-weight:300;color:var(--muted);line-height:1.62}
+.case-item p.ph{
+  color:var(--muted-2);font-style:italic;
+  border-left:2px solid var(--line);padding-left:14px;
+}
+
+/* ============================================================
+   05 · FIT / CHECKLIST
+   ============================================================ */
+.sec-fit{
+  background:
+    radial-gradient(ellipse 50% 60% at 90% 50%, rgba(26,5,255,.13), transparent 62%),
+    var(--ink);
+  border-top:1px solid var(--line-soft);
+}
+.fit-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:64px;align-items:center}
+.fit-list{list-style:none;display:grid;gap:12px}
+.fit-list li{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-sm);padding:22px 26px;
+  font-size:16.5px;font-weight:300;color:var(--muted);line-height:1.55;
+  transition:border-color .25s ease,transform .25s ease,background .25s ease;
+}
+.fit-list li:hover{
+  border-color:rgba(31,239,73,.4);transform:translateX(5px);background:var(--card-2);
+}
+.fit-check{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;margin-top:1px;
+  background:rgba(31,239,73,.12);border:1px solid rgba(31,239,73,.4);
+  display:grid;place-items:center;
+}
+.fit-check svg{width:12px;height:12px;stroke:var(--green);stroke-width:3;fill:none}
+.fit-tese{
+  padding:36px;border-radius:var(--r);
+  background:var(--grad-soft);border:1px solid rgba(31,239,73,.26);
+}
+.fit-tese p{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(22px,2.7vw,32px);line-height:1.16;letter-spacing:-.025em;
+}
+.fit-tese p .hl{color:var(--green)}
+.fit-tese .sub{
+  font-family:var(--body);font-weight:300;font-size:16px;
+  color:var(--muted);margin-top:16px;line-height:1.6;letter-spacing:0;
+}
+
+/* ============================================================
+   06 · DIAGNÓSTICO
+   ============================================================ */
+.sec-diag{background:var(--ink-2);border-top:1px solid var(--line-soft)}
+.diag-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;
+}
+.diag-q{
+  background:var(--card);padding:34px 30px;
+  display:flex;flex-direction:column;gap:16px;
+  transition:background .3s ease;min-height:170px;
+}
+.diag-q:hover{background:var(--card-2)}
+.diag-q .qn{
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  letter-spacing:.12em;color:var(--green);
+}
+.diag-q p{font-size:17px;font-weight:400;line-height:1.38;letter-spacing:-.01em}
+.diag-fecho{
+  margin-top:34px;display:grid;grid-template-columns:1fr auto;
+  gap:36px;align-items:center;
+  padding:36px 42px;border-radius:var(--r);
+  background:var(--card);border:1px solid var(--line);
+}
+.diag-fecho p{font-size:17px;font-weight:300;color:var(--muted);line-height:1.6;max-width:64ch}
+.diag-fecho p b{color:var(--fg);font-weight:500}
+
+/* ============================================================
+   07 · CTA FINAL
+   ============================================================ */
+.sec-cta{
+  background:
+    radial-gradient(ellipse 70% 60% at 20% 15%, rgba(26,5,255,.26), transparent 62%),
+    radial-gradient(ellipse 60% 55% at 88% 85%, rgba(31,239,73,.16), transparent 60%),
+    var(--ink);
+  border-top:1px solid var(--line-soft);
+}
+.cta-wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;align-items:stretch}
+.cta-main{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:52px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.cta-brandline{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--green);margin-bottom:22px;
+}
+.cta-main h2{
+  font-size:clamp(28px,3.6vw,44px);line-height:1.05;
+  margin-bottom:22px;letter-spacing:-.03em;
+}
+.cta-main p{font-size:17px;font-weight:300;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.cta-main p b{color:var(--fg);font-weight:500}
+.cta-main .btn{margin-top:22px;align-self:flex-start}
+
+/* fluxo VQC vertical */
+.flow{
+  background:var(--card);border:1px solid rgba(31,239,73,.24);
+  border-radius:var(--r);padding:42px 36px;
+}
+.flow-tag{
+  font-family:var(--mono);font-size:11px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--muted-2);margin-bottom:26px;
+  display:flex;align-items:center;gap:12px;
+}
+.flow-tag::before{content:'';width:26px;height:1px;background:var(--grad)}
+.flow-step{position:relative;padding-left:44px;padding-bottom:30px}
+.flow-step:last-child{padding-bottom:0}
+.flow-step .ln{
+  position:absolute;left:11px;top:26px;bottom:2px;width:1px;
+  background:linear-gradient(180deg,var(--line),transparent);
+  transform-origin:50% 0;
+}
+.flow-dot{
+  position:absolute;left:0;top:4px;
+  width:23px;height:23px;border-radius:50%;
+  display:grid;place-items:center;
+  font-family:var(--display);font-weight:900;font-size:11px;color:#0A0A0A;
+}
+.flow-step.f1 .flow-dot{background:var(--blue-lt);box-shadow:0 0 20px rgba(106,87,255,.6)}
+.flow-step.f2 .flow-dot{background:#4CA078;box-shadow:0 0 20px rgba(76,160,120,.5)}
+.flow-step.f3 .flow-dot{background:var(--green);box-shadow:0 0 22px rgba(31,239,73,.6)}
+.flow-step h4{
+  font-family:var(--display);font-weight:800;font-size:16px;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;
+}
+.flow-step.f1 h4{color:var(--blue-lt)}
+.flow-step.f2 h4{color:#5CB878}
+.flow-step.f3 h4{color:var(--green)}
+.flow-step p{font-size:14.5px;font-weight:300;color:var(--muted);line-height:1.5}
+
+/* ============================================================
+   08 · FORMULÁRIO
+   ============================================================ */
+.sec-form{
+  background:var(--ink-2);border-top:1px solid var(--line-soft);
+  padding:110px 0;
+}
+.form-wrap{
+  max-width:720px;margin:0 auto;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:52px;
+  box-shadow:0 40px 100px -30px rgba(0,0,0,.9);
+}
+.form-tag{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--green);margin-bottom:16px;
+}
+.form-wrap h2{font-size:clamp(27px,3.4vw,40px);line-height:1.05;margin-bottom:12px;letter-spacing:-.03em}
+.form-sub{font-size:16px;font-weight:300;color:var(--muted);line-height:1.6;margin-bottom:34px}
+.ff-lgpd{
+  margin-top:16px;font-size:12px;color:var(--muted-2);
+  text-align:center;line-height:1.55;
+}
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+  background:#060606;border-top:1px solid var(--line);
+  padding:44px 32px;
+}
+.foot{
+  max-width:var(--max);margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:28px;flex-wrap:wrap;
+}
+.foot-brandrow{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.foot-mark{height:30px;width:auto;display:block}
+.foot-brand{
+  font-family:var(--display);font-weight:800;font-size:17px;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.foot p{font-family:var(--mono);font-size:11.5px;color:var(--muted-2);line-height:1.8;letter-spacing:.04em}
+.foot-vqc{display:flex;gap:10px;flex-wrap:wrap}
+.foot-vqc span{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted-2);
+  padding:7px 13px;border:1px solid var(--line);border-radius:7px;
+}
+
+/* WhatsApp flutuante */
+.wa{
+  position:fixed;right:22px;bottom:22px;z-index:70;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:grid;place-items:center;
+  box-shadow:0 12px 34px -8px rgba(37,211,102,.6);
+  transition:transform .25s cubic-bezier(.2,.7,.3,1);
+}
+.wa:hover{transform:scale(1.08) translateY(-2px)}
+.wa svg{width:29px;height:29px;fill:#fff}
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+.reveal .rv{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.reveal .rv.in{opacity:1;transform:none}
+.reveal.reveal-off .rv{opacity:1!important;transform:none!important;transition:none!important}
+/* Com GSAP no comando, a transicao CSS sai de cena para nao competir. */
+.reveal.gsap-on .rv{transition:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal .rv{opacity:1;transform:none;transition:none}
+  *{animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width:1080px){
+  .vqc-block{grid-template-columns:110px 1fr;gap:30px;padding:34px}
+  .vqc-letra{font-size:88px}
+  .diag-grid{grid-template-columns:repeat(2,1fr)}
+  .fit-wrap{gap:40px}
+}
+@media (max-width:900px){
+  body{font-size:16px}
+  section{padding:70px 0}
+  .container{padding:0 20px}
+  header{padding:10px 18px}
+  html.scrolled header{padding:8px 18px}
+  /* alvos de toque com pelo menos 44px */
+  header .h-cta{min-height:44px;display:inline-flex;align-items:center;padding:12px 16px}
+  .brand-lk{min-height:44px;align-items:center}
+  .ff-lgpd{font-size:12.5px}
+  .brand-tag{display:none}
+  header .h-cta{font-size:11px;padding:10px 14px}
+
+  .hero{
+    padding:120px 0 70px;
+    /* No celular a foto e ampliada e deslocada para a regiao mais escura
+       da cena. A 58% a janela caia no ponto de fuga iluminado e o contraste
+       do titulo despencava para 2.2:1; a 18% fica em 4.7:1. */
+    background-position:center, center, 18% top;
+    background-size:auto, auto, 280% auto;
+  }
+  .hero-grid{grid-template-columns:1fr;gap:36px}
+  .hero h1{max-width:100%;font-size:clamp(29px,7.4vw,42px)}
+  .hero h1 .l1{font-size:.6em}
+  .hero-sub{max-width:100%;font-size:16.5px}
+  .hero-figura{max-width:330px;justify-self:center;margin:0 auto}
+  .hf-chip{left:-14px;top:45%;padding:11px 14px;border-radius:12px;gap:10px}
+  .hf-nome{font-size:17px;max-width:15ch}   /* 15ch quebra em 2 linhas; 12ch quebrava em 3 */
+  .hf-cta-wrap{top:66%}
+  .hf-cta-wrap .btn{font-size:12.5px;padding:14px 18px;border-radius:10px}
+  .hf-glow{width:150%}
+  .case-logo{padding:12px 16px}
+  .case-logo img{height:32px}
+  .hero-selos{margin-top:40px;padding-top:28px;gap:30px}
+  .selo .num{font-size:30px}
+  .vqc-rail{max-width:100%}
+  .vqc-rail .step{padding:13px 12px}
+  .vqc-rail .step .nm{font-size:9.5px;letter-spacing:.1em}
+
+  h2.sec{font-size:clamp(25px,6.2vw,34px);max-width:100%}
+  .lead{font-size:16.5px;margin-bottom:34px}
+
+  .prob-grid{grid-template-columns:1fr}
+  .prob-card{padding:28px 22px}
+  .prob-card h3{font-size:19px}
+  .prob-fecho{padding:24px 22px;font-size:18px}
+
+  .vqc-block{grid-template-columns:1fr;gap:18px;padding:28px 22px}
+  .vqc-letra{font-size:66px}
+  .vqc-etapa{margin-top:8px}
+  .vqc-block p{font-size:15.5px}
+  .metodo-fecho{grid-template-columns:1fr;gap:24px;padding:26px 22px}
+  .metodo-fecho .btn{width:100%}
+
+  .cases-grid{grid-template-columns:1fr}
+  .case-top,.case-body{padding:26px 22px}
+  .case-top h3{font-size:25px}
+
+  .fit-wrap{grid-template-columns:1fr;gap:32px}
+  .fit-list li{padding:18px 20px;font-size:15.5px}
+  .fit-tese{padding:26px 22px}
+
+  .diag-grid{grid-template-columns:1fr}
+  .diag-q{min-height:0;padding:24px 22px;gap:10px}
+  .diag-fecho{grid-template-columns:1fr;gap:24px;padding:26px 22px}
+  .diag-fecho .btn{width:100%}
+
+  .cta-wrap{grid-template-columns:1fr}
+  .cta-main{padding:30px 22px}
+  .cta-main .btn{width:100%;align-self:stretch}
+  .flow{padding:28px 22px}
+
+  .sec-form{padding:70px 0}
+  .form-wrap{padding:28px 20px}
+
+  .foot{flex-direction:column;text-align:center;gap:20px}
+  .foot-brandrow{justify-content:center}
+  .btn{font-size:14px;padding:17px 24px}
+  .wa{width:50px;height:50px;right:16px;bottom:16px}
+  .wa svg{width:25px;height:25px}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="progress"><i></i></div>
+
+<!-- ============================ HEADER ============================ -->
+<header>
+  <div class="brand">
+    <a class="brand-lk" href="#topo" aria-label="ARGOS — início">
+      <img class="brand-mark" src="assets/argos-mark.png" alt="" width="223" height="420">
+      <span class="brand-name">ARGOS</span>
+    </a>
+    <div class="brand-tag">Marketing Industrial B2B</div>
+  </div>
+  <a href="form.html" class="h-cta">Quero meu diagnóstico</a>
+</header>
+
+<!-- ============================ 01 · HERO ============================ -->
+<section class="hero" id="topo">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="hero-grid">
+
+      <div>
+        <div class="eyebrow rv"><span class="dot"></span> Marketing Industrial B2B</div>
+
+        <h1>
+          <span class="l1 rv">Sua indústria é forte no mercado.</span>
+          <span class="l2 rv">Mas quando um comprador procura um fornecedor, ele encontra você
+            <span class="grad-text">ou o seu concorrente?</span></span>
+        </h1>
+
+        <p class="hero-sub rv">
+          A <b>ARGOS</b> transforma o digital em um canal de geração de demanda,
+          oportunidades comerciais e novas cotações para indústrias.
+        </p>
+        <p class="hero-sub rv">
+          Com o <b>Método VQC</b>, geramos volume, analisamos a demanda e direcionamos
+          a estratégia para o que realmente pode virar negócio.
+        </p>
+
+        <div class="vqc-rail rv">
+          <div class="step s1"><div class="ltr">V</div><div class="nm">Volume</div><i class="bar"></i></div>
+          <div class="step s2"><div class="ltr">Q</div><div class="nm">Qualificação</div><i class="bar"></i></div>
+          <div class="step s3"><div class="ltr">C</div><div class="nm">Cotação</div><i class="bar"></i></div>
+        </div>
+      </div>
+
+      <figure class="hero-figura rv">
+        <span class="hf-glow" aria-hidden="true"></span>
+        <picture>
+          <source srcset="assets/especialista.webp" type="image/webp">
+          <img class="hf-foto" src="assets/especialista.png"
+               alt="Especialista da ARGOS em marketing industrial"
+               width="900" height="1121" fetchpriority="high" decoding="async">
+        </picture>
+        <figcaption class="hf-chip">
+          <i class="hc-dot"></i>
+          <strong class="hf-nome">Fale com nosso especialista</strong>
+        </figcaption>
+        <div class="hf-cta-wrap">
+          <a href="form.html" class="btn btn-grad">
+            Quero um diagnóstico <span class="arw">→</span>
+          </a>
+        </div>
+        <p class="hc-note">Sem compromisso de contratação.<br>Resposta pelo WhatsApp corporativo.</p>
+      </figure>
+
+    </div>
+
+    <div class="hero-selos rv">
+      <div class="selo">
+        <div class="num grad-text">VQC</div>
+        <div class="lab">Método proprietário<br>Argos</div>
+      </div>
+      <div class="selo">
+        <div class="num green">B2B</div>
+        <div class="lab">Venda técnica,<br>consultiva e por cotação</div>
+      </div>
+      <div class="selo">
+        <div class="num" style="color:var(--blue-lt)">DADOS</div>
+        <div class="lab">Do clique<br>até a cotação</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 02 · PROBLEMA ============================ -->
+<section class="sec-problema" id="problema">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="kick rv"><b>01</b> &nbsp;·&nbsp; O cenário</div>
+    <h2 class="sec rv">O problema nem sempre é falta de mercado.</h2>
+    <p class="lead rv">
+      Muitas vezes, sua indústria simplesmente <b>não está capturando a demanda certa</b>.
+      Talvez hoje sua empresa enfrente algum desses cenários:
+    </p>
+
+    <div class="prob-grid">
+      <div class="prob-card rv">
+        <div class="prob-num">01</div>
+        <h3>Seu concorrente aparece antes de você</h3>
+        <p>Quando um potencial comprador pesquisa pelo que sua indústria oferece, outra empresa ocupa o espaço que poderia ser seu.</p>
+      </div>
+      <div class="prob-card rv">
+        <div class="prob-num">02</div>
+        <h3>O marketing gera leads, mas poucas cotações</h3>
+        <p>Os números aparecem nos relatórios, mas poucas oportunidades realmente chegam ao comercial.</p>
+      </div>
+      <div class="prob-card rv">
+        <div class="prob-num">03</div>
+        <h3>Muitos contatos não possuem perfil</h3>
+        <p>Sua equipe perde tempo atendendo leads que dificilmente avançariam para uma negociação.</p>
+      </div>
+      <div class="prob-card rv">
+        <div class="prob-num">04</div>
+        <h3>Você não sabe o que realmente gera negócio</h3>
+        <p>Existem campanhas, acessos e contatos, mas pouca clareza sobre quais ações estão gerando oportunidades comerciais.</p>
+      </div>
+    </div>
+
+    <div class="prob-fecho rv">
+      É justamente esse espaço que a <span class="grad-text">ARGOS</span> trabalha.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 03 · MÉTODO VQC ============================ -->
+<section class="sec-metodo" id="metodo">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="kick rv"><b>02</b> &nbsp;·&nbsp; Método VQC</div>
+    <h2 class="sec wide rv">Não basta gerar demanda. É preciso entender qual demanda pode virar cotação.</h2>
+    <p class="lead rv">
+      O Método VQC conecta <b>marketing e comercial</b> através de três etapas.
+    </p>
+
+    <div class="vqc-stack">
+
+      <article class="vqc-block v rv">
+        <i class="edge"></i>
+        <div>
+          <div class="vqc-letra">V</div>
+          <div class="vqc-etapa">Etapa 01</div>
+        </div>
+        <div>
+          <div class="vqc-tit">Volume</div>
+          <h3>Geramos demanda.</h3>
+          <p>Colocamos sua indústria diante de potenciais compradores e aumentamos o volume de oportunidades entrando no funil.</p>
+          <p>Esse volume gera os dados necessários para entendermos melhor o comportamento do mercado.</p>
+          <div class="vqc-saida">
+            <span>Mais demanda</span><span>Mais oportunidades</span><span>Mais dados</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="vqc-block q rv">
+        <i class="edge"></i>
+        <div>
+          <div class="vqc-letra">Q</div>
+          <div class="vqc-etapa">Etapa 02</div>
+        </div>
+        <div>
+          <div class="vqc-tit">Qualificação</div>
+          <h3>Identificamos o que realmente possui potencial.</h3>
+          <p>Analisamos a demanda gerada para entender:</p>
+          <ul class="vqc-lista">
+            <li>quais campanhas trazem melhores oportunidades;</li>
+            <li>quais produtos possuem maior procura;</li>
+            <li>quais buscas demonstram maior intenção;</li>
+            <li>quais públicos avançam no comercial;</li>
+            <li>e quais contatos realmente chegam à cotação.</li>
+          </ul>
+          <div class="vqc-saida">
+            <span>Com essas informações, refinamos continuamente a estratégia</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="vqc-block c rv">
+        <i class="edge"></i>
+        <div>
+          <div class="vqc-letra">C</div>
+          <div class="vqc-etapa">Etapa 03</div>
+        </div>
+        <div>
+          <div class="vqc-tit">Cotação</div>
+          <h3>Escalamos o que gera oportunidade comercial.</h3>
+          <p>O objetivo não é otimizar apenas para clique ou lead. É direcionar cada vez mais o investimento para aquilo que gera:</p>
+          <div class="vqc-saida">
+            <span>Pedidos de orçamento</span><span>Cotações</span><span>Projetos</span><span>Negociações reais</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="metodo-fecho rv">
+      <p>
+        <span>Geramos volume.</span>
+        <span>Identificamos o que qualifica.</span>
+        <span class="hl">Escalamos o que gera cotação.</span>
+      </p>
+      <a href="form.html" class="btn btn-grad">Quero aplicar o método VQC <span class="arw">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 04 · CASES ============================ -->
+<section class="sec-cases" id="cases">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="kick rv"><b>03</b> &nbsp;·&nbsp; Cases Argos</div>
+    <h2 class="sec rv">O VQC aplicado na prática.</h2>
+    <p class="lead rv">Indústrias que passaram a tratar o digital como canal de geração de cotação.</p>
+
+    <div class="cases-grid">
+
+      <article class="case rv">
+        <div class="case-top">
+          <h3 class="case-logo">
+            <img src="assets/brumake.png" alt="Brumake — Materiais Elétricos"
+                 width="429" height="111" loading="lazy" decoding="async">
+          </h3>
+          <div class="case-seg">Materiais Elétricos</div>
+        </div>
+        <div class="case-body">
+          <div class="case-item">
+            <div class="case-lab">Desafio</div>
+            <p class="ph">[Inserir principal cenário antes da ARGOS.]</p>
+          </div>
+          <div class="case-item">
+            <div class="case-lab">Estratégia</div>
+            <p>Estruturamos a geração de demanda e passamos a utilizar os dados das oportunidades para otimizar continuamente as campanhas.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="case rv">
+        <div class="case-top">
+          <h3 class="case-logo">
+            <img src="assets/csi.png" alt="CSI Nordeste — Serviços Industriais"
+                 width="640" height="145" loading="lazy" decoding="async">
+          </h3>
+          <div class="case-seg">Serviços Industriais</div>
+        </div>
+        <div class="case-body">
+          <div class="case-item">
+            <div class="case-lab">Desafio</div>
+            <p class="ph">[Inserir principal cenário antes da ARGOS.]</p>
+          </div>
+          <div class="case-item">
+            <div class="case-lab">Estratégia</div>
+            <p>Ampliamos a geração de demanda e conectamos os dados do marketing às oportunidades que realmente avançavam no comercial.</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 05 · FIT ============================ -->
+<section class="sec-fit" id="fit">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="kick rv"><b>04</b> &nbsp;·&nbsp; Perfil</div>
+    <h2 class="sec wide rv">O Método VQC faz sentido para sua indústria se…</h2>
+
+    <div class="fit-wrap">
+      <ul class="fit-list">
+        <li class="rv">
+          <span class="fit-check"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+          Sua venda acontece através de <b>cotações, projetos ou negociação consultiva</b>.
+        </li>
+        <li class="rv">
+          <span class="fit-check"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+          Seu comercial precisa receber <b>mais oportunidades</b>.
+        </li>
+        <li class="rv">
+          <span class="fit-check"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+          Você gera leads, mas <b>muitos chegam sem perfil</b>.
+        </li>
+        <li class="rv">
+          <span class="fit-check"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+          Não consegue identificar <b>quais campanhas realmente geram negócio</b>.
+        </li>
+        <li class="rv">
+          <span class="fit-check"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+          Quer transformar o digital em um <b>canal mais previsível de aquisição</b>.
+        </li>
+      </ul>
+
+      <div class="fit-tese rv">
+        <p>Marketing não deve terminar no lead.<br><span class="hl">Ele precisa chegar até o comercial.</span></p>
+        <p class="sub">O VQC existe exatamente para fechar essa distância — do primeiro clique até o pedido de orçamento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 06 · DIAGNÓSTICO ============================ -->
+<section class="sec-diag" id="diagnostico-info">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="kick rv"><b>05</b> &nbsp;·&nbsp; Diagnóstico Argos</div>
+    <h2 class="sec rv">Descubra onde sua indústria está perdendo oportunidades.</h2>
+    <p class="lead rv">
+      Antes de simplesmente aumentar o investimento em marketing, <b>analisamos o cenário atual da sua empresa</b>. Buscamos entender:
+    </p>
+
+    <div class="diag-grid">
+      <div class="diag-q rv"><div class="qn">01</div><p>Existe demanda pelo que você vende?</p></div>
+      <div class="diag-q rv"><div class="qn">02</div><p>Sua empresa está aparecendo para essa demanda?</p></div>
+      <div class="diag-q rv"><div class="qn">03</div><p>Quem está capturando essas oportunidades hoje?</p></div>
+      <div class="diag-q rv"><div class="qn">04</div><p>Os leads gerados possuem perfil?</p></div>
+      <div class="diag-q rv"><div class="qn">05</div><p>Quantos avançam para cotação?</p></div>
+      <div class="diag-q rv"><div class="qn">06</div><p>Onde as oportunidades estão sendo perdidas?</p></div>
+    </div>
+
+    <div class="diag-fecho rv">
+      <p>
+        A partir disso, identificamos os <b>principais gargalos e oportunidades</b> para estruturar
+        o crescimento digital da sua indústria.
+      </p>
+      <a href="form.html" class="btn btn-green">Quero receber meu diagnóstico <span class="arw">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 07 · CTA FINAL ============================ -->
+<section class="sec-cta" id="cta">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="cta-wrap">
+
+      <div class="cta-main rv">
+        <div class="cta-brandline">ARGOS · Marketing Industrial</div>
+        <h2>Mais leads não significam mais negócios.</h2>
+        <p>
+          O que importa é <b>gerar demanda</b>, entender <b>o que qualifica</b> e aumentar
+          as <b>oportunidades de cotação</b>.
+        </p>
+        <p>
+          Sua indústria já possui produto, experiência, equipe e capacidade técnica.
+          A ARGOS trabalha para fazer o mercado encontrar essa estrutura e transformar
+          essa atenção em oportunidades comerciais.
+        </p>
+        <a href="form.html" class="btn btn-grad">Quero aplicar o VQC na minha indústria <span class="arw">→</span></a>
+      </div>
+
+      <div class="flow rv">
+        <div class="flow-tag">Método VQC</div>
+        <div class="flow-step f1">
+          <i class="ln"></i>
+          <div class="flow-dot">V</div>
+          <h4>Volume</h4>
+          <p>Geramos demanda.</p>
+        </div>
+        <div class="flow-step f2">
+          <i class="ln"></i>
+          <div class="flow-dot">Q</div>
+          <h4>Qualificação</h4>
+          <p>Identificamos o que realmente possui potencial.</p>
+        </div>
+        <div class="flow-step f3">
+          <div class="flow-dot">C</div>
+          <h4>Cotação</h4>
+          <p>Escalamos o que gera oportunidade comercial.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 08 · FORMULÁRIO ============================ -->
+<section class="sec-form" id="diagnostico">
+  <div class="mesh"></div>
+  <div class="container">
+    <div class="form-wrap rv" style="text-align:center">
+      <div class="form-tag" style="justify-content:center">Diagnóstico Argos</div>
+      <h2>Fale com um especialista da ARGOS</h2>
+      <p class="form-sub" style="margin-left:auto;margin-right:auto;max-width:52ch">
+        São 6 perguntas rápidas sobre o cenário da sua indústria. A partir delas montamos
+        o diagnóstico e devolvemos pelo WhatsApp.
+      </p>
+      <a href="form.html" class="btn btn-grad btn-full">
+        Começar meu diagnóstico <span class="arw">→</span>
+      </a>
+      <p class="ff-lgpd">
+        Leva cerca de 2 minutos · Gratuito e sem compromisso de contratação.<br>
+        Seus dados são usados apenas para preparar o diagnóstico. (LGPD)
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <div class="foot">
+    <div>
+      <div class="foot-brandrow">
+        <img class="foot-mark" src="assets/argos-mark.png" alt="" width="223" height="420">
+        <div class="foot-brand">ARGOS</div>
+      </div>
+      <p>Marketing Industrial B2B · Método VQC</p>
+      <p>© <span id="yr">2026</span> ARGOS. Todos os direitos reservados.</p>
+    </div>
+    <div class="foot-vqc">
+      <span>Volume</span><span>Qualificação</span><span>Cotação</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa" href="https://wa.me/5500000000000?text=Ol%C3%A1%2C%20quero%20o%20diagn%C3%B3stico%20da%20minha%20ind%C3%BAstria." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.470 0 1.45 1.06 2.86 1.21 3.06.15.2 2.09 3.2 5.08 4.48.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.8h-.02c-1.75 0-3.47-.47-4.97-1.36l-.36-.21-3.7.97.99-3.6-.23-.37a9.83 9.83 0 01-1.5-5.25c0-5.44 4.44-9.87 9.9-9.87 2.64 0 5.12 1.03 6.99 2.9a9.8 9.8 0 012.89 6.98c0 5.44-4.44 9.87-9.89 9.87M20.52 3.45A11.75 11.75 0 0012.05.02C5.5.02.17 5.34.17 11.88c0 2.09.55 4.13 1.59 5.93L.07 24l6.34-1.66a11.9 11.9 0 005.64 1.43h.01c6.55 0 11.88-5.32 11.88-11.86 0-3.17-1.24-6.15-3.48-8.39"/></svg>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- ano ---------- */
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ============================================================
+     ANIMACAO
+     Camada 1 (ideal)   : GSAP + ScrollTrigger.
+     Camada 2 (fallback): IntersectionObserver + transicao CSS.
+     Camada 3 (rede)    : revela o que ja esta na primeira dobra.
+     A pagina nunca depende de JS para ser legivel.
+     ============================================================ */
+  var docEl  = document.documentElement;
+  var els    = [].slice.call(document.querySelectorAll('.rv'));
+  var REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function revealAll(){
+    docEl.classList.add('reveal-off');
+    els.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* Rede de seguranca: age so sobre o que ja esta na primeira dobra.
+     O que esta abaixo continua reservado para a animacao de scroll. */
+  function safetyNet(delay){
+    setTimeout(function(){
+      els.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        if (parseFloat(getComputedStyle(el).opacity) < 0.05 && r.top < window.innerHeight) {
+          el.style.transition = 'none';
+          el.style.opacity    = 1;
+          el.style.transform  = 'none';
+          el.style.visibility = 'visible';
+          el.classList.add('in');
+        }
+      });
+    }, delay);
+  }
+
+  /* ---------------------------------------------------------- GSAP */
+  function initGSAP(){
+    gsap.registerPlugin(ScrollTrigger);
+    docEl.classList.add('gsap-on');
+    gsap.defaults({ ease:'power3.out' });
+
+    var inHero  = [].slice.call(document.querySelectorAll('.hero .rv'));
+    var ownRun  = [].slice.call(document.querySelectorAll('.vqc-block'));
+    var batched = els.filter(function(el){
+      return inHero.indexOf(el) === -1 && ownRun.indexOf(el) === -1;
+    });
+
+    /* 1 - abertura do hero: uma sequencia encadeada, nao 8 animacoes soltas */
+    gsap.timeline({ delay:0.15 })
+      .fromTo('.hero .eyebrow',
+        { autoAlpha:0, y:16 }, { autoAlpha:1, y:0, duration:0.6 })
+      .fromTo('.hero h1 .l1',
+        { autoAlpha:0, y:20, clipPath:'inset(0 0 100% 0)' },
+        { autoAlpha:1, y:0,  clipPath:'inset(0 0 0% 0)', duration:0.8 }, '-=0.30')
+      .fromTo('.hero h1 .l2',
+        { autoAlpha:0, y:28, clipPath:'inset(0 0 100% 0)' },
+        { autoAlpha:1, y:0,  clipPath:'inset(0 0 0% 0)', duration:1.0 }, '-=0.60')
+      .fromTo('.hero-sub',
+        { autoAlpha:0, y:18 }, { autoAlpha:1, y:0, duration:0.7, stagger:0.10 }, '-=0.70')
+      .fromTo('.vqc-rail',
+        { autoAlpha:0, y:18 }, { autoAlpha:1, y:0, duration:0.7 }, '-=0.45')
+      .fromTo('.vqc-rail .bar',
+        { scaleX:0 }, { scaleX:1, duration:0.7, stagger:0.12, ease:'power2.out' }, '-=0.35')
+      .fromTo('.hero-figura',
+        { autoAlpha:0, y:34, scale:0.97 }, { autoAlpha:1, y:0, scale:1, duration:1.0 }, '-=0.95')
+      .fromTo('.hf-chip',
+        { autoAlpha:0, x:-20 }, { autoAlpha:1, x:0, duration:0.6 }, '-=0.45')
+      .fromTo('.hf-cta-wrap',
+        { autoAlpha:0, y:20 }, { autoAlpha:1, y:0, duration:0.6 }, '-=0.35')
+      .add(function(){
+        /* so depois da entrada: a etiqueta e o CTA passam a flutuar de leve.
+           Os alvos sao os inv0lucros, nunca o proprio botao — assim o
+           transform do :hover continua livre. */
+        gsap.to('.hf-chip',     { y:-9, duration:3.2, ease:'sine.inOut', yoyo:true, repeat:-1 });
+        gsap.to('.hf-cta-wrap', { y:-7, duration:2.6, ease:'sine.inOut', yoyo:true, repeat:-1, delay:0.35 });
+      })
+      .fromTo('.hero-selos',
+        { autoAlpha:0, y:20 }, { autoAlpha:1, y:0, duration:0.6 }, '-=0.50')
+      .fromTo('.hero-selos .selo',
+        { autoAlpha:0, y:14 }, { autoAlpha:1, y:0, duration:0.5, stagger:0.10 }, '-=0.45');
+
+    /* 2 - reveal generico em lote: escalona quem entra junto na tela */
+    ScrollTrigger.batch(batched, {
+      start:'top 88%',
+      once:true,
+      onEnter:function(b){
+        gsap.fromTo(b, { autoAlpha:0, y:28 },
+                       { autoAlpha:1, y:0, duration:0.8, stagger:0.08, overwrite:true });
+      }
+    });
+
+    /* 3 - blocos do metodo: a aresta se desenha, a letra sai do desfoque */
+    gsap.utils.toArray('.vqc-block').forEach(function(b){
+      var st = { trigger:b, start:'top 78%', once:true };
+      gsap.fromTo(b, { autoAlpha:0, y:30 },
+                     { autoAlpha:1, y:0, duration:0.8, scrollTrigger:st });
+      gsap.fromTo(b.querySelector('.edge'), { scaleY:0 },
+                     { scaleY:1, duration:1.1, delay:0.15, ease:'power2.inOut', scrollTrigger:st });
+      gsap.fromTo(b.querySelector('.vqc-letra'),
+                     { autoAlpha:0, scale:0.72, filter:'blur(12px)' },
+                     { autoAlpha:1, scale:1, filter:'blur(0px)', duration:1, delay:0.1, scrollTrigger:st });
+      gsap.fromTo(b.querySelectorAll('.vqc-tit, h3, p, .vqc-lista li, .vqc-saida span'),
+                     { autoAlpha:0, y:16 },
+                     { autoAlpha:1, y:0, duration:0.55, stagger:0.045, delay:0.25,
+                       ease:'power2.out', scrollTrigger:st });
+    });
+
+    /* 4 - fluxo VQC do CTA final: desce ligando os pontos */
+    gsap.utils.toArray('.flow-step').forEach(function(step, i){
+      var st = { trigger:'.flow', start:'top 78%', once:true };
+      gsap.fromTo(step, { autoAlpha:0, x:-16 },
+                        { autoAlpha:1, x:0, duration:0.6, delay:i*0.18, scrollTrigger:st });
+      var ln = step.querySelector('.ln');
+      if (ln) gsap.fromTo(ln, { scaleY:0 },
+                        { scaleY:1, duration:0.55, delay:i*0.18+0.35, ease:'none', scrollTrigger:st });
+    });
+
+    /* 5 - barra de progresso: o gradiente VQC preenche conforme a leitura avanca */
+    gsap.to('.progress i', {
+      scaleX:1, ease:'none',
+      scrollTrigger:{ trigger:document.body, start:'top top', end:'bottom bottom', scrub:0.25 }
+    });
+
+    /* 6 - header comprime depois dos primeiros 80px */
+    ScrollTrigger.create({
+      start:0, end:'max',
+      onUpdate:function(self){ docEl.classList.toggle('scrolled', self.scroll() > 80); }
+    });
+
+    /* 7 - parallax discreto da malha de blueprint */
+    gsap.utils.toArray('.mesh').forEach(function(m){
+      var sec = m.closest('section');
+      if (!sec) return;
+      gsap.fromTo(m, { yPercent:-5 }, {
+        yPercent:5, ease:'none',
+        scrollTrigger:{ trigger:sec, start:'top bottom', end:'bottom top', scrub:true }
+      });
+    });
+
+    /* as fontes mudam a altura do texto: remede os gatilhos depois que carregam */
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
+    }
+    window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+
+    safetyNet(3200);
+  }
+
+  /* ------------------------------------------------------ fallback */
+  function initFallback(){
+    if (!('IntersectionObserver' in window)) { revealAll(); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e, i){
+        if (!e.isIntersecting) return;
+        var d = Math.min(i * 70, 280);
+        setTimeout(function(){ e.target.classList.add('in'); }, d);
+        io.unobserve(e.target);
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+    els.forEach(function(el){ io.observe(el); });
+    safetyNet(2200);
+  }
+
+  if (REDUCE)                                   revealAll();
+  else if (window.gsap && window.ScrollTrigger)  initGSAP();
+  else                                           initFallback();
+
+})();
+</script>
+</body>
+</html>
