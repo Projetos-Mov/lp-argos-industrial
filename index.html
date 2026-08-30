@@ -18,7 +18,14 @@
    IntersectionObserver. Sem JS ou sem suporte, o conteudo nasce visivel. */
 if ('IntersectionObserver' in window) document.documentElement.className += ' reveal';
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Fontes sem bloquear a primeira pintura: o navegador baixa como "print"
+     (nao bloqueia) e promove para "all" ao terminar. Como o CSS ja pede
+     display=swap, o texto aparece na fonte de sistema e troca depois. -->
+<link rel="preload" as="style"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+      onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"></noscript>
 <style>
 /* ============================================================
    ARGOS · Marketing Industrial B2B
@@ -1276,8 +1283,8 @@ footer{
   <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.470 0 1.45 1.06 2.86 1.21 3.06.15.2 2.09 3.2 5.08 4.48.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.8h-.02c-1.75 0-3.47-.47-4.97-1.36l-.36-.21-3.7.97.99-3.6-.23-.37a9.83 9.83 0 01-1.5-5.25c0-5.44 4.44-9.87 9.9-9.87 2.64 0 5.12 1.03 6.99 2.9a9.8 9.8 0 012.89 6.98c0 5.44-4.44 9.87-9.89 9.87M20.52 3.45A11.75 11.75 0 0012.05.02C5.5.02.17 5.34.17 11.88c0 2.09.55 4.13 1.59 5.93L.07 24l6.34-1.66a11.9 11.9 0 005.64 1.43h.01c6.55 0 11.88-5.32 11.88-11.86 0-3.17-1.24-6.15-3.48-8.39"/></svg>
 </a>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
 (function(){
   'use strict';
@@ -1331,27 +1338,31 @@ footer{
     });
 
     /* 1 - abertura do hero: uma sequencia encadeada, nao 8 animacoes soltas */
-    gsap.timeline({ delay:0.15 })
+    /* Sem delay inicial e com tempos curtos: o titulo fica legivel por
+       volta de 0.4s e a dobra inteira assenta em ~1.1s (antes: ~2.5s).
+       O retrato perdeu o 'scale' — animar escala num elemento com tres
+       drop-shadow custa caro a cada quadro. */
+    gsap.timeline()
       .fromTo('.hero .eyebrow',
-        { autoAlpha:0, y:16 }, { autoAlpha:1, y:0, duration:0.6 })
+        { autoAlpha:0, y:12 }, { autoAlpha:1, y:0, duration:0.40 })
       .fromTo('.hero h1 .l1',
-        { autoAlpha:0, y:20, clipPath:'inset(0 0 100% 0)' },
-        { autoAlpha:1, y:0,  clipPath:'inset(0 0 0% 0)', duration:0.8 }, '-=0.30')
+        { autoAlpha:0, y:14, clipPath:'inset(0 0 100% 0)' },
+        { autoAlpha:1, y:0,  clipPath:'inset(0 0 0% 0)', duration:0.50 }, '-=0.24')
       .fromTo('.hero h1 .l2',
-        { autoAlpha:0, y:28, clipPath:'inset(0 0 100% 0)' },
-        { autoAlpha:1, y:0,  clipPath:'inset(0 0 0% 0)', duration:1.0 }, '-=0.60')
+        { autoAlpha:0, y:18, clipPath:'inset(0 0 100% 0)' },
+        { autoAlpha:1, y:0,  clipPath:'inset(0 0 0% 0)', duration:0.60 }, '-=0.40')
       .fromTo('.hero-sub',
-        { autoAlpha:0, y:18 }, { autoAlpha:1, y:0, duration:0.7, stagger:0.10 }, '-=0.70')
+        { autoAlpha:0, y:12 }, { autoAlpha:1, y:0, duration:0.45, stagger:0.07 }, '-=0.42')
       .fromTo('.vqc-rail',
-        { autoAlpha:0, y:18 }, { autoAlpha:1, y:0, duration:0.7 }, '-=0.45')
+        { autoAlpha:0, y:12 }, { autoAlpha:1, y:0, duration:0.45 }, '-=0.32')
       .fromTo('.vqc-rail .bar',
-        { scaleX:0 }, { scaleX:1, duration:0.7, stagger:0.12, ease:'power2.out' }, '-=0.35')
+        { scaleX:0 }, { scaleX:1, duration:0.50, stagger:0.08, ease:'power2.out' }, '-=0.30')
       .fromTo('.hero-figura',
-        { autoAlpha:0, y:34, scale:0.97 }, { autoAlpha:1, y:0, scale:1, duration:1.0 }, '-=0.95')
+        { autoAlpha:0, y:24 }, { autoAlpha:1, y:0, duration:0.60 }, '-=0.70')
       .fromTo('.hf-chip',
-        { autoAlpha:0, x:-20 }, { autoAlpha:1, x:0, duration:0.6 }, '-=0.45')
+        { autoAlpha:0, x:-14 }, { autoAlpha:1, x:0, duration:0.40 }, '-=0.32')
       .fromTo('.hf-cta-wrap',
-        { autoAlpha:0, y:20 }, { autoAlpha:1, y:0, duration:0.6 }, '-=0.35')
+        { autoAlpha:0, y:14 }, { autoAlpha:1, y:0, duration:0.40 }, '-=0.24')
       .add(function(){
         /* so depois da entrada: a etiqueta e o CTA passam a flutuar de leve.
            Os alvos sao os inv0lucros, nunca o proprio botao — assim o
@@ -1369,24 +1380,24 @@ footer{
       start:'top 88%',
       once:true,
       onEnter:function(b){
-        gsap.fromTo(b, { autoAlpha:0, y:28 },
-                       { autoAlpha:1, y:0, duration:0.8, stagger:0.08, overwrite:true });
+        gsap.fromTo(b, { autoAlpha:0, y:22 },
+                       { autoAlpha:1, y:0, duration:0.55, stagger:0.06, overwrite:true });
       }
     });
 
     /* 3 - blocos do metodo: a aresta se desenha, a letra sai do desfoque */
     gsap.utils.toArray('.vqc-block').forEach(function(b){
       var st = { trigger:b, start:'top 78%', once:true };
-      gsap.fromTo(b, { autoAlpha:0, y:30 },
-                     { autoAlpha:1, y:0, duration:0.8, scrollTrigger:st });
+      gsap.fromTo(b, { autoAlpha:0, y:24 },
+                     { autoAlpha:1, y:0, duration:0.55, scrollTrigger:st });
       gsap.fromTo(b.querySelector('.edge'), { scaleY:0 },
-                     { scaleY:1, duration:1.1, delay:0.15, ease:'power2.inOut', scrollTrigger:st });
+                     { scaleY:1, duration:0.75, delay:0.10, ease:'power2.inOut', scrollTrigger:st });
       gsap.fromTo(b.querySelector('.vqc-letra'),
-                     { autoAlpha:0, scale:0.72, filter:'blur(12px)' },
-                     { autoAlpha:1, scale:1, filter:'blur(0px)', duration:1, delay:0.1, scrollTrigger:st });
+                     { autoAlpha:0, scale:0.78, filter:'blur(7px)' },
+                     { autoAlpha:1, scale:1, filter:'blur(0px)', duration:0.65, delay:0.06, scrollTrigger:st });
       gsap.fromTo(b.querySelectorAll('.vqc-tit, h3, p, .vqc-lista li, .vqc-saida span'),
-                     { autoAlpha:0, y:16 },
-                     { autoAlpha:1, y:0, duration:0.55, stagger:0.045, delay:0.25,
+                     { autoAlpha:0, y:12 },
+                     { autoAlpha:1, y:0, duration:0.4, stagger:0.035, delay:0.16,
                        ease:'power2.out', scrollTrigger:st });
     });
 
@@ -1413,9 +1424,12 @@ footer{
     });
 
     /* 7 - parallax discreto da malha de blueprint */
+    /* Parallax so no desktop: mover um elemento grande com mascara a cada
+       quadro e o tipo de coisa que engasga a rolagem no celular. */
+    var telaLarga = window.matchMedia('(min-width: 901px)').matches;
     gsap.utils.toArray('.mesh').forEach(function(m){
       var sec = m.closest('section');
-      if (!sec) return;
+      if (!sec || !telaLarga) return;
       gsap.fromTo(m, { yPercent:-5 }, {
         yPercent:5, ease:'none',
         scrollTrigger:{ trigger:sec, start:'top bottom', end:'bottom top', scrub:true }
@@ -1428,7 +1442,7 @@ footer{
     }
     window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
 
-    safetyNet(3200);
+    safetyNet(1400);
   }
 
   /* ------------------------------------------------------ fallback */
@@ -1443,12 +1457,19 @@ footer{
       });
     }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
     els.forEach(function(el){ io.observe(el); });
-    safetyNet(2200);
+    safetyNet(1200);
   }
 
-  if (REDUCE)                                   revealAll();
-  else if (window.gsap && window.ScrollTrigger)  initGSAP();
-  else                                           initFallback();
+  function ligarAnimacao(){
+    if (REDUCE)                                   revealAll();
+    else if (window.gsap && window.ScrollTrigger)  initGSAP();
+    else                                           initFallback();
+  }
+  /* Os scripts do GSAP agora sao defer: executam antes do DOMContentLoaded,
+     entao aqui eles ja existem — e o parser nao ficou parado esperando. */
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', ligarAnimacao);
+  else ligarAnimacao();
 
 })();
 </script>

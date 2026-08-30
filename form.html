@@ -10,7 +10,14 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Fontes sem bloquear a primeira pintura: o navegador baixa como "print"
+     (nao bloqueia) e promove para "all" ao terminar. Como o CSS ja pede
+     display=swap, o texto aparece na fonte de sistema e troca depois. -->
+<link rel="preload" as="style"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+      onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"></noscript>
 <style>
 :root{
   --ink:#0A0A0A; --ink-2:#0F0F11; --card:#121212; --card-2:#161618;
@@ -468,7 +475,20 @@ function atualizarTopo(){
   cont.innerHTML = '<b>' + String(pos+1).padStart(2,'0') + '</b> / ' + String(vis.length).padStart(2,'0');
 }
 
+var primeiraPintura = true;
 function pintar(html, foco){
+  /* Na carga inicial nao ha nada para "sair": pintar direto evita
+     180ms de tela vazia logo na abertura. */
+  if (primeiraPintura){
+    primeiraPintura = false;
+    tela.innerHTML = html;
+    atualizarTopo();
+    if (foco){
+      var i = tela.querySelector('input,textarea');
+      if (i && !('ontouchstart' in window)) i.focus();
+    }
+    return;
+  }
   tela.classList.add('saindo');
   setTimeout(function(){
     tela.innerHTML = html;
