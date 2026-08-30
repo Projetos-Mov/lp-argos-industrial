@@ -318,7 +318,6 @@ h1,h2,h3,.display{font-family:var(--display);font-weight:800;line-height:1.06;le
    CONFIGURAÇÃO
    ========================================================================== */
 var ENDPOINT = 'https://n8n-n8n.ltypmw.easypanel.host/webhook/argos-industria';  // n8n
-var WHATS    = '5500000000000';    // número que recebe o lead
 
 /* ==========================================================================
    PERGUNTAS
@@ -389,7 +388,7 @@ var FINAIS = {
       ['02','Diagnóstico pelo WhatsApp','Em até 1 dia útil, com os gargalos que encontramos entre o clique e a cotação.'],
       ['03','Conversa de 30 minutos','Só se fizer sentido para os dois lados. Sem compromisso de contratação.']
     ],
-    cta:'Falar agora no WhatsApp', ctaClasse:'btn-green', whats:true
+    cta:'Conhecer o Método VQC', ctaClasse:'btn-green', href:'index.html#metodo'
   },
   cedo: {
     icone:'neutro',
@@ -399,16 +398,16 @@ var FINAIS = {
       ['01','Vamos analisar mesmo assim','Se enxergarmos um caminho viável no seu segmento, entramos em contato.'],
       ['02','Quando a operação crescer','Fale com a gente. O diagnóstico continua de pé, sem custo.']
     ],
-    cta:'Tirar uma dúvida no WhatsApp', ctaClasse:'btn-grad', whats:true
+    cta:'Voltar para o site', ctaClasse:'btn-grad', href:'index.html'
   },
   conhecendo: {
     icone:'neutro',
     titulo:'Perfeito. Sem pressa.',
     texto:'Você marcou que está conhecendo possibilidades — então não vamos te ligar todo dia. Vamos analisar o cenário do seu segmento e, se houver algo útil para a sua indústria, mandamos pelo WhatsApp. <b>Quem decide o ritmo é você.</b>',
     passos:[
-      ['01','Quando quiser avançar','Chame no WhatsApp e a gente retoma de onde parou, com o seu diagnóstico na mão.']
+      ['01','Quando quiser avançar','É só responder quando entrarmos em contato — retomamos de onde parou, com o seu diagnóstico na mão.']
     ],
-    cta:'Falar quando eu quiser', ctaClasse:'btn-grad', whats:true
+    cta:'Voltar para o site', ctaClasse:'btn-grad', href:'index.html'
   }
 };
 
@@ -589,9 +588,6 @@ function telaFinal(){
     passos += '</ul>';
   }
 
-  var msg = 'Diagnóstico ARGOS%0A%0A';
-  for (var k in estado.r) msg += k + ': ' + estado.r[k] + '%0A';
-  var link = 'https://wa.me/' + WHATS + '?text=' + encodeURIComponent(decodeURIComponent(msg));
 
   pintar(
     '<div class="fim-ico ' + f.icone + '">' +
@@ -603,8 +599,7 @@ function telaFinal(){
     '<p class="fim-txt">' + f.texto + '</p>' +
     passos +
     '<div class="acoes">' +
-      '<a class="btn ' + f.ctaClasse + '" href="' + link + '" target="_blank" rel="noopener">' + f.cta + ' <span class="arw">→</span></a>' +
-      '<a class="link-voltar" href="index.html">voltar para o site</a>' +
+      '<a class="btn ' + f.ctaClasse + '" href="' + f.href + '">' + f.cta + ' <span class="arw">→</span></a>' +
     '</div>'
   , false);
 }
@@ -743,33 +738,32 @@ function enviar(rota){
   dados.enviado_em  = new Date().toISOString();
   var u = utms(); for (var m in u) dados[m] = u[m];
 
-  if (!ENDPOINT){ console.info('[ARGOS] Sem ENDPOINT — lead só no WhatsApp:', dados); return; }
+  if (!ENDPOINT){ console.warn('[ARGOS] Sem ENDPOINT — o lead NAO foi enviado a lugar nenhum:', dados); return; }
 
   var corpo = JSON.stringify(dados);
 
-  function porFetch(motivo){
-    fetch(ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'},
-                      body:corpo, keepalive:true })
-      .then(function(r){
-        if (!r.ok) console.warn('[ARGOS] webhook respondeu', r.status, '—', motivo);
-      })
-      .catch(function(e){
-        console.warn('[ARGOS] falha ao enviar o lead:', e, '—', motivo);
-      });
-  }
-
-  /* sendBeacon e o certo aqui: sobrevive a quem fecha a aba na tela final.
-     Mas ele devolve false quando nao consegue enfileirar — nesse caso o
-     lead se perderia em silencio. Por isso o retorno e checado. */
-  if (navigator.sendBeacon){
-    var enfileirou = false;
-    try { enfileirou = navigator.sendBeacon(ENDPOINT, new Blob([corpo], {type:'application/json'})); }
-    catch(e){ enfileirou = false; }
-    if (enfileirou) return;
-    porFetch('sendBeacon recusou');
-    return;
-  }
-  porFetch('sem sendBeacon');
+  /* fetch com keepalive sobrevive a quem fecha a aba na tela final, igual
+     ao sendBeacon, com duas vantagens decisivas aqui:
+       - credentials:'omit' mantem a requisicao no CORS simples. O beacon
+         envia sempre com credenciais e exigiria do servidor o cabecalho
+         Access-Control-Allow-Credentials: true, que o n8n nao devolve —
+         o preflight falhava e o lead se perdia.
+       - devolve o status, entao da para registrar a falha em vez de
+         confiar num "enfileirei" que nao significa "entreguei". */
+  fetch(ENDPOINT, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:corpo,
+    keepalive:true,
+    credentials:'omit',
+    mode:'cors'
+  })
+  .then(function(r){
+    if (!r.ok) console.warn('[ARGOS] webhook respondeu', r.status);
+  })
+  .catch(function(e){
+    console.warn('[ARGOS] falha ao enviar o lead:', e);
+  });
 }
 
 /* ========================================================================== */
