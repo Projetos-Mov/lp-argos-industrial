@@ -317,7 +317,7 @@ h1,h2,h3,.display{font-family:var(--display);font-weight:800;line-height:1.06;le
 /* ==========================================================================
    CONFIGURAÇÃO
    ========================================================================== */
-var ENDPOINT = '';                 // webhook (n8n, CRM, Zapier). Vazio = WhatsApp.
+var ENDPOINT = 'https://n8n-n8n.ltypmw.easypanel.host/webhook/argos-industria';  // n8n
 var WHATS    = '5500000000000';    // número que recebe o lead
 
 /* ==========================================================================
@@ -746,15 +746,30 @@ function enviar(rota){
   if (!ENDPOINT){ console.info('[ARGOS] Sem ENDPOINT — lead só no WhatsApp:', dados); return; }
 
   var corpo = JSON.stringify(dados);
-  // sendBeacon sobrevive a quem fecha a aba na tela final
-  if (navigator.sendBeacon){
-    try {
-      navigator.sendBeacon(ENDPOINT, new Blob([corpo], {type:'application/json'}));
-      return;
-    } catch(e){}
+
+  function porFetch(motivo){
+    fetch(ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'},
+                      body:corpo, keepalive:true })
+      .then(function(r){
+        if (!r.ok) console.warn('[ARGOS] webhook respondeu', r.status, '—', motivo);
+      })
+      .catch(function(e){
+        console.warn('[ARGOS] falha ao enviar o lead:', e, '—', motivo);
+      });
   }
-  fetch(ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'},
-                    body:corpo, keepalive:true }).catch(function(){});
+
+  /* sendBeacon e o certo aqui: sobrevive a quem fecha a aba na tela final.
+     Mas ele devolve false quando nao consegue enfileirar — nesse caso o
+     lead se perderia em silencio. Por isso o retorno e checado. */
+  if (navigator.sendBeacon){
+    var enfileirou = false;
+    try { enfileirou = navigator.sendBeacon(ENDPOINT, new Blob([corpo], {type:'application/json'})); }
+    catch(e){ enfileirou = false; }
+    if (enfileirou) return;
+    porFetch('sendBeacon recusou');
+    return;
+  }
+  porFetch('sem sendBeacon');
 }
 
 /* ========================================================================== */
